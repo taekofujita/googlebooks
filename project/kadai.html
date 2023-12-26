@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Books Search</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0e6f6;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #keyword {
+            padding: 10px;
+            border: 2px solid #d3c1e5;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        #readbook {
+            padding: 10px 20px;
+            background-color: #e2d1f2;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        #readbook:hover {
+            background-color: #c7b2e2;
+        }
+
+        #result p {
+            background-color: #ffffff;
+            border: 1px solid #d3c1e5;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 10px auto;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Google Books Search</h1>
+    <input type="text" id="keyword" placeholder="キーワードを入力">
+    <button id="readbook">検索</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('readbook').addEventListener('click', function() {
+            var keyword = document.getElementById('keyword').value;
+            var url = 'https://www.googleapis.com/books/v1/volumes?q=' + encodeURIComponent(keyword);
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    var resultDiv = document.getElementById('result');
+                    resultDiv.innerHTML = '';
+
+                    data.items.forEach(item => {
+                        var title = item.volumeInfo.title;
+                        var publisher = item.volumeInfo.publisher ? item.volumeInfo.publisher : '出版社不明';
+                        resultDiv.innerHTML += `<p><strong>${title}</strong> - ${publisher}</p>`;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+</html>

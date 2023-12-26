@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Books Search - Hawaii Style</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa; /* スカイブルー */
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #00796b; /* 深い海の色 */
+            margin-bottom: 40px;
+        }
+
+        #keyword {
+            padding: 10px;
+            border: 2px solid #b2ebf2; /* やや淡いスカイブルー */
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        #readbook {
+            padding: 10px 20px;
+            background-color: #4dd0e1; /* 明るいスカイブルー */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            color: white;
+        }
+
+        #readbook:hover {
+            background-color: #26c6da; /* より深いスカイブルー */
+        }
+
+        #result p {
+            background-color: #ffffff;
+            border: 1px solid #b2ebf2;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 10px auto;
+            text-align: left;
+        }
+
+        /* 装飾用の背景画像やアイコンを追加する場合 */
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('path/to/hawaii-beach-image.jpg') no-repeat center center;
+            background-size: cover;
+            z-index: -1;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="Hawaii"></div> <!-- ハワイのビーチの背景画像 -->
+    <h1>Google Books Search - Hawaii Style</h1>
+    <input type="text" id="keyword" placeholder="キーワードを入力">
+    <button id="readbook">検索</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('readbook').addEventListener('click', function() {
+            var keyword = document.getElementById('keyword').value;
+            var url = 'https://www.googleapis.com/books/v1/volumes?q=' + encodeURIComponent(keyword);
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // デバッグ用
+                    var resultDiv = document.getElementById('result');
+                    resultDiv.innerHTML = ''; // 結果をクリア
+
+                    data.items.forEach(item => {
+                        var title = item.volumeInfo.title;
+                        var publisher = item.volumeInfo.publisher ? item.volumeInfo.publisher : '出版社不明';
+                        resultDiv.innerHTML += `<p><strong>${title}</strong> - ${publisher}</p>`;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+</html>
